@@ -6,7 +6,7 @@ import { Sidebar } from '../components/Sidebar'
 
 function RooteLayout() {
   return (
-    <div>
+    <div style={{display:"flex", flexDirection:"row"}}>
         <Sidebar/>
         <Outlet></Outlet>
     </div>

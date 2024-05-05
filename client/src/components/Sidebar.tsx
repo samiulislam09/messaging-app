@@ -9,6 +9,7 @@ import {
     IconSun,
 } from '@tabler/icons-react';
 import classes from '../styling/Sidebar.module.css';
+import { useModal } from '../hooks/useModal';
 
 interface NavbarLinkProps {
     icon: typeof IconHome2;
@@ -34,18 +35,24 @@ function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
     { icon: IconPlus, label: 'Add New'},
     { icon: IconArrowsJoin, label: 'Join' },
     ];
+    
 
 export function Sidebar() {
     const [active, setActive] = useState(0);
-
+    const createModal = useModal("CreateServer");
     const {colorScheme, toggleColorScheme} = useMantineColorScheme();
-        console.log(colorScheme)
+    const btnClicked = (idx:number) => {
+        if(idx === 1) {
+            createModal.open();
+        }
+
+    }
     const links = mockdata.map((link, index) => (
         <NavbarLink
         {...link}
         key={link.label}
         active={index === active}
-        onClick={() => {alert(index); setActive(index)}}
+        onClick={() => {btnClicked(index); setActive(index)}}
         />
     ));
 
@@ -57,7 +64,7 @@ export function Sidebar() {
             </Stack>
             <Stack justify="center" align='center'>
             <Tooltip label="change theme" position="right" transitionProps={{ duration: 0 }}>
-        <UnstyledButton onClick={toggleColorScheme} className={classes.link} data-active={active || undefined}>
+        <UnstyledButton onClick={toggleColorScheme} className={classes.link}>
             {
                 colorScheme === 'dark' ? <IconSun style={{ width: rem(20), height: rem(20) }} stroke={1.5} /> : <IconMoon style={{ width: rem(20), height: rem(20) }} stroke={1.5} />
             }
