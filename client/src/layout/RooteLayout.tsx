@@ -32,7 +32,8 @@ function RooteLayout() {
           onCompleted: (data) => {
             console.log("profile",profile)
             setProfile(data.createProfile)
-          }
+          },
+          refetchQueries: ['GetProfile']
         })
       }
       catch (error) {
