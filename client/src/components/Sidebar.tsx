@@ -10,6 +10,7 @@ import {
 } from '@tabler/icons-react';
 import classes from '../styling/Sidebar.module.css';
 import { useModal } from '../hooks/useModal';
+import { UserButton } from '@clerk/clerk-react';
 
 interface NavbarLinkProps {
     icon: typeof IconHome2;
@@ -64,18 +65,18 @@ export function Sidebar() {
             </Stack>
             <Stack justify="center" align='center'>
             <Tooltip label="change theme" position="right" transitionProps={{ duration: 0 }}>
-        <UnstyledButton onClick={toggleColorScheme} className={classes.link}>
-            {
-                colorScheme === 'dark' ? <IconSun style={{ width: rem(20), height: rem(20) }} stroke={1.5} /> : <IconMoon style={{ width: rem(20), height: rem(20) }} stroke={1.5} />
-            }
-        </UnstyledButton>
-        </Tooltip>
+            <UnstyledButton onClick={toggleColorScheme} className={classes.link}>
+                {
+                    colorScheme === 'dark' ? <IconSun style={{ width: rem(20), height: rem(20) }} stroke={1.5} /> : <IconMoon style={{ width: rem(20), height: rem(20) }} stroke={1.5} />
+                }
+            </UnstyledButton>
+            </Tooltip>
             </Stack>
         </div>
         
 
-        <Stack justify="center" gap={0}>
-            <NavbarLink icon={IconLogout} label="Logout" />
+        <Stack justify="center" align='center'>
+            <UserButton />
         </Stack>
         </nav>
     );
