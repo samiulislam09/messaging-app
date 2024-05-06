@@ -1,12 +1,12 @@
 import { useModal } from '../hooks/useModal'
-import { Button, CloseButton, Flex, Group, Image, Modal, rem, Stack, Text } from '@mantine/core';
+import { Button, CloseButton, Flex, Group, Image, Modal, rem, Stack, Text, TextInput } from '@mantine/core';
 import { useForm} from '@mantine/form';
 import { Dropzone, DropzoneProps, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import React from 'react';
 import classes from '../styling/ModalDropzone.module.css';
 import { IconUpload, IconX, IconXboxX } from '@tabler/icons-react';
 
-function CreateChannelModal() {
+function CreateServerlModal() {
     const {isOpen, close} = useModal("CreateServer");
     const [file, setFile] = React.useState<File | null>(null);
     const form = useForm({
@@ -14,7 +14,7 @@ function CreateChannelModal() {
             name: "",
         },
         validate: {
-            name: (value) => !(value.trim().length > 3)&& "Channel name must be at least 3 characters long",
+            name: (value) => !(value.trim().length > 3)&& "Server name must be at least 3 characters long",
         },
     });
     const [imagePreview, setImagePreview] = React.useState<string | null>(null);
@@ -31,9 +31,9 @@ function CreateChannelModal() {
     };
 
   return (
-    <Modal title="Create a channel" opened={isOpen} onClose={close}>
-      <Text c="dimmed">
-        Channels are where your members communicate.
+    <Modal title="Create a server" opened={isOpen} onClose={close}>
+      <Text c="dimmed" pb={rem(30)}>
+        Create a server to start chatting with your friends
       </Text>
         <form onSubmit={form.onSubmit(() => {})}>
           <Stack >
@@ -60,18 +60,19 @@ function CreateChannelModal() {
               {
                 imagePreview && (
                   <Flex>
-                    <CloseButton onClick={()=>{setImagePreview(null)}} icon={<IconXboxX size={18} stroke={1.5} />} />
+                    <CloseButton onClick={()=>{setImagePreview(null)}} icon={<IconXboxX size={18} stroke={1.5}/>} />
                     <Image src={imagePreview} alt="Preview" w={rem(150)} h={rem(150)} radius="lg" />
                   </Flex>
                 )
               }
-              
-
             </Flex>
+              <TextInput label="Server name" placeholder='Enter Channel name' {...form.getInputProps('name')} error={form.errors.name}>
+              </TextInput>
+              <Button type="submit" variant="light" color="blue" radius="sm" fullWidth disabled={!!form.errors.name}>Create</Button>
           </Stack>
         </form>
     </Modal>
   )
 }
 
-export default CreateChannelModal
+export default CreateServerlModal;

@@ -7,7 +7,7 @@ import {ClerkProvider, RedirectToSignIn, SignedIn, SignedOut} from '@clerk/clerk
 import {BrowserRouter, Route, Routes, useNavigate} from 'react-router-dom';
 import RooteLayout from './layout/RooteLayout.tsx';
 import Home from './pages/Home.tsx';
-import CreateChannelModal from './components/CreateChannelModal.tsx';
+import CreateServerlModal from './components/CreateServerModal.tsx'
 
 const ProtectedRoute = ({children}: {children: React.ReactNode}) => {
   return (
@@ -33,7 +33,7 @@ const RouterComponent = () => {
             index
             element={
               <ProtectedRoute>
-                <CreateChannelModal />
+                <CreateServerlModal />
                 <Home/>
               </ProtectedRoute>
             }
