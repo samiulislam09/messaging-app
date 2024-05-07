@@ -24,6 +24,11 @@ input CreateProfileDto {
   name: String!
 }
 
+input CreateServerDto {
+  name: String!
+  profileId: Float!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -51,6 +56,7 @@ enum MemberRole {
 
 type Mutation {
   createProfile(input: CreateProfileDto!): Profile!
+  createServer(file: Upload, input: CreateServerDto!): Server!
 }
 
 type Profile {
@@ -64,7 +70,7 @@ type Profile {
 
 type Query {
   getProfileById(profileId: Float!): Profile!
-  hello: String!
+  getServers(profileId: Float!): [Server!]!
 }
 
 type Server {
@@ -77,3 +83,6 @@ type Server {
   profile: Profile
   profileId: Float!
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
