@@ -16,6 +16,8 @@ export type Scalars = {
   Float: { input: number; output: number; }
   /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
   DateTime: { input: any; output: any; }
+  /** The `Upload` scalar type represents a file upload. */
+  Upload: { input: any; output: any; }
 };
 
 export type Channel = {
@@ -39,6 +41,11 @@ export type CreateProfileDto = {
   email: Scalars['String']['input'];
   imageUrl: Scalars['String']['input'];
   name: Scalars['String']['input'];
+};
+
+export type CreateServerDto = {
+  name: Scalars['String']['input'];
+  profileId: Scalars['Float']['input'];
 };
 
 export type Member = {
@@ -65,11 +72,18 @@ export enum MemberRole {
 export type Mutation = {
   __typename?: 'Mutation';
   createProfile: Profile;
+  createServer: Server;
 };
 
 
 export type MutationCreateProfileArgs = {
   input: CreateProfileDto;
+};
+
+
+export type MutationCreateServerArgs = {
+  file?: InputMaybe<Scalars['Upload']['input']>;
+  input: CreateServerDto;
 };
 
 export type Profile = {
@@ -85,7 +99,7 @@ export type Profile = {
 export type Query = {
   __typename?: 'Query';
   getProfileById: Profile;
-  hello: Scalars['String']['output'];
+  getServers: Array<Server>;
 };
 
 
@@ -93,11 +107,16 @@ export type QueryGetProfileByIdArgs = {
   profileId: Scalars['Float']['input'];
 };
 
+
+export type QueryGetServersArgs = {
+  profileId: Scalars['Float']['input'];
+};
+
 export type Server = {
   __typename?: 'Server';
   channels?: Maybe<Array<Maybe<Channel>>>;
   id: Scalars['ID']['output'];
-  imgUrl: Scalars['String']['output'];
+  imageUrl: Scalars['String']['output'];
   inviteCode?: Maybe<Scalars['String']['output']>;
   members?: Maybe<Array<Maybe<Member>>>;
   name: Scalars['String']['output'];
@@ -112,5 +131,14 @@ export type CreateProfileMutationVariables = Exact<{
 
 export type CreateProfileMutation = { __typename?: 'Mutation', createProfile: { __typename?: 'Profile', id: string, imageUrl: string, name: string, email: string } };
 
+export type CreateServerMutationVariables = Exact<{
+  input: CreateServerDto;
+  file?: InputMaybe<Scalars['Upload']['input']>;
+}>;
+
+
+export type CreateServerMutation = { __typename?: 'Mutation', createServer: { __typename?: 'Server', id: string, name: string, imageUrl: string, members?: Array<{ __typename?: 'Member', id: string } | null> | null } };
+
 
 export const CreateProfileDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateProfile"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateProfileDto"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createProfile"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"imageUrl"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"email"}}]}}]}}]} as unknown as DocumentNode<CreateProfileMutation, CreateProfileMutationVariables>;
+export const CreateServerDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateServer"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateServerDto"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"file"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Upload"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createServer"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}},{"kind":"Argument","name":{"kind":"Name","value":"file"},"value":{"kind":"Variable","name":{"kind":"Name","value":"file"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"imageUrl"}},{"kind":"Field","name":{"kind":"Name","value":"members"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<CreateServerMutation, CreateServerMutationVariables>;
