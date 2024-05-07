@@ -5,10 +5,15 @@ import { Dropzone, DropzoneProps, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import React from 'react';
 import classes from '../styling/ModalDropzone.module.css';
 import { IconUpload, IconX, IconXboxX } from '@tabler/icons-react';
+import { CREATE_SERVER } from '../graphql/mutations/CreateServer';
+import { useMutation } from '@apollo/client';
+import { useProfileStore } from '../store/profileStore';
 
 function CreateServerlModal() {
     const {isOpen, close} = useModal("CreateServer");
     const [file, setFile] = React.useState<File | null>(null);
+    const [createServer, {loading}] = useMutation(CREATE_SERVER);
+    const profileId = useProfileStore((state) => state.profile?.id)
     const form = useForm({
         initialValues: {
             name: "",
@@ -18,6 +23,7 @@ function CreateServerlModal() {
         },
     });
     const [imagePreview, setImagePreview] = React.useState<string | null>(null);
+    
     const handleDropZoneChange: DropzoneProps['onDrop'] = (files) => {
         if(files.length === 0){
           return setImagePreview(null);
@@ -30,12 +36,41 @@ function CreateServerlModal() {
         reader.readAsDataURL(files[0]);
     };
 
+
+    const submitFrorm = async () => {
+        
+        if(!file) {
+            return;
+        }
+        try {
+            createServer({
+                variables: {
+                    input: {
+                        name: form.values.name,
+                        profileId,
+                    },
+                    file: file
+                },
+                onCompleted: () => {
+                  setImagePreview(null);
+                  form.reset();
+                  setFile(null);
+                  close();
+                },
+                refetchQueries: ['GetServers']
+            })
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
   return (
     <Modal title="Create a server" opened={isOpen} onClose={close}>
       <Text c="dimmed" pb={rem(30)}>
         Create a server to start chatting with your friends
       </Text>
-        <form onSubmit={form.onSubmit(() => {})}>
+        <form onSubmit={form.onSubmit(()=>{submitFrorm()})}>
           <Stack >
             <Flex justify="center" align="center" direction="column">
               {
@@ -66,7 +101,7 @@ function CreateServerlModal() {
                 )
               }
             </Flex>
-              <TextInput label="Server name" placeholder='Enter Channel name' {...form.getInputProps('name')} error={form.errors.name}>
+              <TextInput label="Server name" value='name' placeholder='Enter Channel name' {...form.getInputProps('name')} error={form.errors.name}>
               </TextInput>
               <Button type="submit" variant="light" color="blue" radius="sm" fullWidth disabled={!!form.errors.name}>Create</Button>
           </Stack>
